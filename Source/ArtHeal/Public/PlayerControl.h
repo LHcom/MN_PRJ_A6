@@ -29,24 +29,24 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	class USpringArmComponent* springArmComp; //ÄÄÆ÷³ÍÆ® ¼Ó¼ºÃß°¡
+	class USpringArmComponent* springArmComp; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ó¼ï¿½ï¿½ß°ï¿½
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	class UCameraComponent* tpsCamComp;
 
-	//ÁÂ¿ì È¸Àü ÀÔ·Â Ã³¸®
+	//ï¿½Â¿ï¿½ È¸ï¿½ï¿½ ï¿½Ô·ï¿½ Ã³ï¿½ï¿½
 	void Turn(const struct FInputActionValue& inputValue);
-	//»óÇÏ È¸Àü ÀÔ·ÂÃ³¸®
+	//ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½Ô·ï¿½Ã³ï¿½ï¿½
 	void LookUp(const struct FInputActionValue& inputValue);
 
-	//ÀÌµ¿¼Óµµ
+	//ï¿½Ìµï¿½ï¿½Óµï¿½
 	UPROPERTY(EditAnywhere, Category = PlayerSetting)
 	float walkSpeed = 600.0f;
-	//ÀÌµ¿¹æÇâ
+	//ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½
 	FVector direction;
 
 	void Move(const struct FInputActionValue& inputValue);
 
-	//ÀÔ·Â °ü·Ã ¼Ó¼º
+	//ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ó¼ï¿½
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* imc_Player;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -63,7 +63,7 @@ public:
 	UFUNCTION()
 	void Paint();
 	
-	UPROPERTY(EditAnywhere, Category = Mysetting)
+	UPROPERTY(EditAnywhere, Category = "Paint")
 	int fireTraceDistance = 1800;
 	
 	UFUNCTION(BlueprintCallable)
@@ -74,4 +74,10 @@ public:
 
 	UPROPERTY()
 	class AApiActor* ApiActor;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Paint")
+	TSubclassOf<class UUserWidget> DrawingUIFactory;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UDrawingUI* DrawingUI;
 };

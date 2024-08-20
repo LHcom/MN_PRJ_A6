@@ -6,6 +6,7 @@
 #include "PlayerControl.h"
 #include "Components/Button.h"
 #include "ArtHeal/LHJ/ApiActor.h"
+#include "Components/Image.h"
 
 void UDrawingUI::NativeConstruct()
 {
@@ -15,6 +16,7 @@ void UDrawingUI::NativeConstruct()
 	SendButton->OnClicked.AddDynamic(this, &UDrawingUI::OnMyClickSend);
 
 	player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	
 }
 
 void UDrawingUI::OnMyClickSend()
@@ -22,4 +24,15 @@ void UDrawingUI::OnMyClickSend()
 	FString FullURL;
 	//= FString::Printf(TEXT("%s?serviceKey=%s&pageNo=%d&numOfRows=%d"));
 	player->SaveTexture();
+}
+
+void UDrawingUI::GetImageMat()
+{
+	 IMG_PaintMat =Cast<UMaterialInterface>(IMG_Painted->GetBrush().GetResourceObject());
+}
+
+void UDrawingUI::SetImageMat()
+{
+	TempMat =UMaterialInstanceDynamic::Create(IMG_PaintMat,this);
+	IMG_Painted->SetBrushFromMaterial(TempMat);	
 }

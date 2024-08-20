@@ -2,7 +2,10 @@
 
 
 #include "YJ/PaintTarget.h"
+
+#include "DrawingUI.h"
 #include "ImageUtils.h"
+#include "PlayerControl.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Canvas.h"
 #include "Kismet/KismetRenderingLibrary.h"
@@ -28,6 +31,10 @@ void APaintTarget::BeginPlay()
 	Super::BeginPlay();
 
 	//만들고 CLEAR 해서 넣어줌 .
+
+	APlayerControl*  Player =Cast<APlayerControl>( GetWorld()->GetFirstPlayerController()->GetCharacter());
+
+	
 	
 	CRT_PaintMask = UKismetRenderingLibrary::CreateRenderTarget2D(GetWorld(),1024,1024,RTF_RGBA32f);
 	
@@ -41,6 +48,23 @@ void APaintTarget::BeginPlay()
 	staticMesh->SetMaterial(0,TempMat);
 	
 	TempMat->SetTextureParameterValue(FName(TEXT("PaintTexture")),CRT_PaintMask);
+
+	// ui 도 다이내믹 matrial 으로 설정
+	//DrawingUI->GetImageMat();
+
+	FTimerHandle handle;
+	GetWorld()->GetTimerManager().SetTimer(handle, [this,Player]()
+	{
+		DrawingUI = Player->DrawingUI;
+
+
+		DrawingUI->SetImageMat();
+
+		DrawingUI->TempMat->SetTextureParameterValue(FName(TEXT("PaintTexture")), CRT_PaintMask);
+	}, 1.f, false);
+	
+	
+	
 	
 }
 

@@ -16,7 +16,7 @@ class ARTHEAL_API UDrawingUI : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
-
+	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* SendButton; //�м� ������ ��ư
 
@@ -25,7 +25,20 @@ public:
 
 	UPROPERTY()
 	class APlayerControl* player;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UImage* IMG_Painted;
 
+	UPROPERTY(EditAnywhere, Category = "Paint")
+	UMaterialInterface* IMG_PaintMat;
+
+	UPROPERTY(EditAnywhere, Category = "Paint")
+	UMaterialInstanceDynamic* TempMat;
+	
+	void GetImageMat();
+
+	void SetImageMat();
+	
 	//URL
 	FString URL;
 

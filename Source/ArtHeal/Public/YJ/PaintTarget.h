@@ -43,4 +43,7 @@ public:
 	void Painted(int num,FVector2D DrawLocation,float brushSize);
 
 	void SaveTexture(UTextureRenderTarget2D* TexRT);
+
+	UPROPERTY()
+	class UDrawingUI* DrawingUI;
 };

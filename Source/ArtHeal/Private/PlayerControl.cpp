@@ -9,9 +9,11 @@
 #include<Camera/CameraComponent.h>
 
 #include "DrawDebugHelpers.h"
+#include "DrawingUI.h"
 #include "EngineUtils.h"
 #include "ImageUtils.h"
 #include "ArtHeal/LHJ/ApiActor.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/LocalPlayer.h"
@@ -28,27 +30,27 @@ APlayerControl::APlayerControl()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	// 1. ½ºÄÌ·¹Å» ¸Þ½Ã µ¥ÀÌÅÍ¸¦ ºÒ·¯¿À°í ½Í´Ù. TEXT ´ÙÀ½Àº ¿¡¼ÂÀÇ °æ·Î
+	// 1. ï¿½ï¿½ï¿½Ì·ï¿½Å» ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Í´ï¿½. TEXT ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
-	//¸¸¾à ¿¡¼ÂÀ» ·ÎµåÇÏ´Âµ¥ ¼º°øÇÑ´Ù¸é
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½Ï´Âµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ù¸ï¿½
 	if (TempMesh.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
-		// 2. Mesh ÄÄÆ÷³ÍÆ®ÀÇ À§Ä¡¿Í È¸Àü °ªÀ» ¼³Á¤ÇÏ°í ½Í´Ù.
+		// 2. Mesh ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Í´ï¿½.
 		//GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, 0, -90));
-		//3. ¸Þ½¬ÀÇ ÄÝ¸®Àü ¼³Á¤Àº NoCollisionÀ¸·Î º¯°æÇÑ´Ù.
+		//3. ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½Ý¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ NoCollisionï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-	//3. TPS Ä«¸Þ¶ó¸¦ ºÙÀÌ°í ½Í´Ù.
-	//3-1. SpringArm ÄÄÆ÷³ÍÆ® ºÙÀÌ±â
+	//3. TPS Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½ï¿½Ì°ï¿½ ï¿½Í´ï¿½.
+	//3-1. SpringArm ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ì±ï¿½
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
 	springArmComp->SetRelativeLocation(FVector(0, 0, 80));
 	springArmComp->TargetArmLength = 400;
-	//À§¾Æ·¡·Î ÀÚÀ¯·Ó°Ô º¼ ¼ö ÀÖµµ·Ï ¼³Á¤
+	//ï¿½ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
 	springArmComp->bUsePawnControlRotation = true;
-	//3-2. Camera ÄÄÆ÷³ÍÆ® ºÙÀÌ±â
+	//3-2. Camera ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Ì±ï¿½
 	tpsCamComp = CreateDefaultSubobject<UCameraComponent>(TEXT("TpsCamComp"));
 	tpsCamComp->SetupAttachment(springArmComp);
 	tpsCamComp->bUsePawnControlRotation = false;
@@ -60,7 +62,7 @@ APlayerControl::APlayerControl()
 void APlayerControl::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	auto pc = Cast<APlayerController>(Controller);
 	if (pc) {
 		auto subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
@@ -77,6 +79,13 @@ void APlayerControl::BeginPlay()
 			ApiActor = Cast<AApiActor>(Actor);
 		}
 	}
+	DrawingUI=CreateWidget<UDrawingUI>(GetWorld(),DrawingUIFactory);
+	if (DrawingUI)
+	{
+		DrawingUI->AddToViewport();
+		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+	
 }
 
 // Called every frame
@@ -84,7 +93,7 @@ void APlayerControl::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	PlayerMove(DeltaTime); //ÀÌµ¿ Ã³¸®
+	PlayerMove(DeltaTime); //ï¿½Ìµï¿½ Ã³ï¿½ï¿½
 
 }
 
@@ -105,27 +114,29 @@ void APlayerControl::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void APlayerControl::Turn(const FInputActionValue& inputValue)
 {
 	float value = inputValue.Get<float>();
-	AddControllerYawInput(value);
+	float turnRate = 0.4f;
+	AddControllerYawInput(value * turnRate);
 }
 
 void APlayerControl::LookUp(const FInputActionValue& inputValue)
 {
 	float value = inputValue.Get<float>();
-	AddControllerPitchInput(value);
+	float lookUpRate = 1.0f;
+	AddControllerPitchInput(value * lookUpRate);
 }
 
 void APlayerControl::Move(const FInputActionValue& inputValue)
 {
 	FVector2D value = inputValue.Get<FVector2D>();
-	//»óÇÏ ÀÔ·Â ÀÌº¥Æ® Ã³¸®
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½
 	direction.X = value.X;
-	// ÁÂ¿ì ÀÔ·Â ÀÌº¥Æ® Ã³¸®
+	// ï¿½Â¿ï¿½ ï¿½Ô·ï¿½ ï¿½Ìºï¿½Æ® Ã³ï¿½ï¿½
 	direction.Y = value.Y;
-	// ¹æÇâ º¤ÅÍ Á¤±ÔÈ­, ´ë°¢¼±ÇÏ¸é ¼Óµµ »¡¶óÁöÁö ¾Ê°Ô ÇÏ±â
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½È­, ï¿½ë°¢ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ ï¿½Ï±ï¿½
 	direction.Normalize();
 }
 
-//ÇÃ·¹ÀÌ¾î ÀÌµ¿Ã³¸® ÇÔ¼ö
+//ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ìµï¿½Ã³ï¿½ï¿½ ï¿½Ô¼ï¿½
 void APlayerControl::PlayerMove(float DeltaTime) {
 	FVector normalizedDirection = FTransform(GetControlRotation()).TransformVector(direction);
 	normalizedDirection.Normalize();
@@ -158,7 +169,7 @@ void APlayerControl::Paint()
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility,CollisionParams);
 	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
-	if (HitResult.bBlockingHit) //È÷Æ®´ë»óÀÌ ÀÖÀ»¶§ 
+	if (HitResult.bBlockingHit) //ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 	{
 		AActor* hitActor = HitResult.GetActor();
 		Paintable = Cast<APaintTarget>(hitActor);
@@ -174,7 +185,7 @@ void APlayerControl::Paint()
 
 void APlayerControl::SaveTexture()
 {
-	//³»°¡±×¸° ±×¸²À» TextureRenderTarget À¸·Î ¹Þ¾Æ¼­ ÀúÀåÇÏ°í ½Í´Ù
+	//ï¿½ï¿½ï¿½ï¿½ï¿½×¸ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ TextureRenderTarget ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Í´ï¿½
 	UTextureRenderTarget2D* TexRT_ = Paintable->CRT_PaintMask;
 	
 	FImage Image;
@@ -191,9 +202,9 @@ void APlayerControl::SaveTexture()
 
 	FString imagePath = FPaths::ProjectPersistentDownloadDir()+"/Painted.jpg";
 
-	// °æ·ÎÇÔ¼ö FPaths::ProjectPersistentDownloadDir() :
-	// ==> °á°ú : ../../../../../../../../Users/(»ç¿ëÀÚ¸í)/Desktop/General/Project/Prototype/(¾ð¸®¾ó ÇÁ·ÎÁ§Æ®¸í)/PersistentDownload
-	// ½ÇÁ¦·Î  C:\UnrealProjects\HttpProject\Saved\PersistentDownloadDir ¿¡ ÀúÀå.
+	// ï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ FPaths::ProjectPersistentDownloadDir() :
+	// ==> ï¿½ï¿½ï¿½ : ../../../../../../../../Users/(ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½)/Desktop/General/Project/Prototype/(ï¿½ð¸®¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½)/PersistentDownload
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  C:\UnrealProjects\HttpProject\Saved\PersistentDownloadDir ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 
 	FFileHelper::SaveArrayToFile(CompressedData,*imagePath);
 	
