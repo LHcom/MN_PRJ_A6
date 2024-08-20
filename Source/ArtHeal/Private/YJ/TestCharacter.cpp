@@ -127,7 +127,7 @@ void ATestCharacter::Paint()
 			FVector2D uv;
 			UGameplayStatics::FindCollisionUV(HitResult, 0, uv);
 
-			Paintable->Painted(0,uv,1);
+			Paintable->Painted(0,uv,50);
 		}
 	}
 }
