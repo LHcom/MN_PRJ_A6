@@ -17,7 +17,7 @@ void AApiActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AApiActor::ReqPostText(const FString& FileName, const TArray<uint8>& FileBin)
+void AApiActor::ReqPostText(const FString& FileName, const TArray64<uint8>& FileBin)
 {
 	// HTTP 모듈 인스턴스 가져오기
 	FHttpModule& HttpModule = FHttpModule::Get();
@@ -30,13 +30,14 @@ void AApiActor::ReqPostText(const FString& FileName, const TArray<uint8>& FileBi
 	// 요청 헤더 설정 (선택 사항)
 	req->SetHeader(TEXT("Content-Type"), TEXT("multipart/form-data"));
 	AppendContentBody(req, FileName, FileBin);
+	
 	// 응답 처리 콜백 바인딩
 	req->OnProcessRequestComplete().BindUObject(this, &AApiActor::OnResPostText);
 	// 요청 전송
 	req->ProcessRequest();
 }
 
-void AApiActor::AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray<uint8>& FileBin)
+void AApiActor::AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray64<uint8>& FileBin)
 {
 	FString body;
 	body.Append(TEXT("Content-Disposition: form-data; name=\"profile_image\"; filename=\"ProfileImage.png\"\r\n"));
@@ -51,6 +52,7 @@ void AApiActor::AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& 
 
 	body.Append(TEXT("Content-Disposition: form-data; name=\"imgData\"\r\n\r\n"));
 	body.Append(FString::Printf(TEXT("%s\r\n"), *FileName));
+	
 	req->SetContentAsString(body);
 }
 
@@ -77,7 +79,7 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 			if (result->HasField(TEXT("recogMsg")))
 				stParsingValue.recogMsg = result->GetStringField(TEXT("recogMsg"));
 			if (result->HasField(TEXT("mnStatus")))
-				stParsingValue.mnStatus = result->GetStringField(TEXT("mnStatus"));
+				stParsingValue.mnStatus = result->GetStringField(TEXT("mnStatus")                                             );
 		}
 	}
 	return stParsingValue;

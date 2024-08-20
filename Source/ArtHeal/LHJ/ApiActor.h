@@ -38,10 +38,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void ReqPostText(const FString& FileName, const TArray<uint8>& FileBin);
+	void ReqPostText(const FString& FileName, const TArray64<uint8>& FileBin);
 	void OnResPostText(FHttpRequestPtr Request, FHttpResponsePtr Response,
 	                   bool bConnectedSuccessfully);
 
-	void AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray<uint8>& FileBin);
-	ParsingValue ParsingJsonValue(const FString& json); 
+	void AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray64<uint8>& FileBin);
+	ParsingValue ParsingJsonValue(const FString& json);
+
+	
 };

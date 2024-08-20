@@ -2,6 +2,8 @@
 
 
 #include "DrawingUI.h"
+
+#include "PlayerControl.h"
 #include "Components/Button.h"
 #include "ArtHeal/LHJ/ApiActor.h"
 
@@ -9,16 +11,15 @@ void UDrawingUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//¹öÆ°¿¬°á
+	//ë²„íŠ¼ì—°ê²°
 	SendButton->OnClicked.AddDynamic(this, &UDrawingUI::OnMyClickSend);
 
+	player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
 
 void UDrawingUI::OnMyClickSend()
 {
 	FString FullURL;
 	//= FString::Printf(TEXT("%s?serviceKey=%s&pageNo=%d&numOfRows=%d"));
-
+	player->SaveTexture();
 }
-
-

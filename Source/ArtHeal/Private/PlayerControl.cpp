@@ -9,7 +9,9 @@
 #include<Camera/CameraComponent.h>
 
 #include "DrawDebugHelpers.h"
+#include "EngineUtils.h"
 #include "ImageUtils.h"
+#include "ArtHeal/LHJ/ApiActor.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/LocalPlayer.h"
@@ -66,7 +68,15 @@ void APlayerControl::BeginPlay()
 			subsystem->AddMappingContext(imc_Player, 0);
 		}
 	}
-	
+
+	for (FActorIterator It(GetWorld()); It; ++It)
+	{
+		AActor* Actor = *It;
+		if (Actor->ActorHasTag(FName("api")))
+		{
+			ApiActor = Cast<AApiActor>(Actor);
+		}
+	}
 }
 
 // Called every frame
@@ -162,7 +172,7 @@ void APlayerControl::Paint()
 	}
 }
 
-void APlayerControl::SaveTexture(UTextureRenderTarget2D* TexRT)
+void APlayerControl::SaveTexture()
 {
 	//내가그린 그림을 TextureRenderTarget 으로 받아서 저장하고 싶다
 	UTextureRenderTarget2D* TexRT_ = Paintable->CRT_PaintMask;
@@ -186,5 +196,7 @@ void APlayerControl::SaveTexture(UTextureRenderTarget2D* TexRT)
 	// 실제로  C:\UnrealProjects\HttpProject\Saved\PersistentDownloadDir 에 저장.
 
 	FFileHelper::SaveArrayToFile(CompressedData,*imagePath);
+	
+	//ApiActor->ReqPostText("Painted.jpg",CompressedData);
 }
 

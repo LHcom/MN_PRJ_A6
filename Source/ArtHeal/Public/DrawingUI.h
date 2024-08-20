@@ -18,10 +18,13 @@ public:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* SendButton; //ºÐ¼® º¸³»´Â ¹öÆ°
+	class UButton* SendButton; //ï¿½Ð¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
 
 	UFUNCTION()
-	void OnMyClickSend(); //ºÐ¼®±Û º¸³»´Â ÇÔ¼ö
+	void OnMyClickSend(); //ï¿½Ð¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+
+	UPROPERTY()
+	class APlayerControl* player;
 
 	//URL
 	FString URL;

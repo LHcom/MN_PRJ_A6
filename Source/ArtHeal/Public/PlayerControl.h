@@ -67,8 +67,11 @@ public:
 	int fireTraceDistance = 1800;
 	
 	UFUNCTION(BlueprintCallable)
-	void SaveTexture(UTextureRenderTarget2D* TexRT);
+	void SaveTexture();
 	
 	UPROPERTY()
 	class APaintTarget* Paintable;
+
+	UPROPERTY()
+	class AApiActor* ApiActor;
 };
