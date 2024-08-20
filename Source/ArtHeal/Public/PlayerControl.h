@@ -80,4 +80,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UDrawingUI* DrawingUI;
+
+	UPROPERTY()
+	class UPlayerAnim* anim;
 };
