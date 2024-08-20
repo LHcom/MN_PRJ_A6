@@ -20,6 +20,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* SendButton; //�м� ������ ��ư
 
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* ArtTitle;
+
 	UFUNCTION()
 	void OnMyClickSend(); //�м��� ������ �Լ�
 
@@ -38,6 +41,10 @@ public:
 	void GetImageMat();
 
 	void SetImageMat();
+
+	void SetArtTitle();
+
+	FString GetRandomTopic();
 	
 	//URL
 	FString URL;
