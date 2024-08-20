@@ -3,8 +3,10 @@
 
 #include "YJ/PaintTarget.h"
 #include "ImageUtils.h"
+#include "Components/StaticMeshComponent.h"
 #include "Engine/Canvas.h"
 #include "Kismet/KismetRenderingLibrary.h"
+#include "Materials/MaterialInstanceDynamic.h"
 
 // Sets default values
 APaintTarget::APaintTarget()

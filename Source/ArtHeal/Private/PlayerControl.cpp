@@ -9,10 +9,14 @@
 #include<Camera/CameraComponent.h>
 
 #include "DrawDebugHelpers.h"
+#include "ImageUtils.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/LocalPlayer.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/FileHelper.h"
 #include "UObject/ConstructorHelpers.h"
 #include "YJ/PaintTarget.h"
 
@@ -147,7 +151,7 @@ void APlayerControl::Paint()
 	if (HitResult.bBlockingHit) //히트대상이 있을때 
 	{
 		AActor* hitActor = HitResult.GetActor();
-		APaintTarget* Paintable = Cast<APaintTarget>(hitActor);
+		Paintable = Cast<APaintTarget>(hitActor);
 		if(Paintable)
 		{
 			FVector2D uv;
@@ -158,4 +162,29 @@ void APlayerControl::Paint()
 	}
 }
 
+void APlayerControl::SaveTexture(UTextureRenderTarget2D* TexRT)
+{
+	//내가그린 그림을 TextureRenderTarget 으로 받아서 저장하고 싶다
+	UTextureRenderTarget2D* TexRT_ = Paintable->CRT_PaintMask;
+	
+	FImage Image;
+	if ( ! FImageUtils::GetRenderTargetImage(TexRT_,Image) )
+	{
+		return;
+	}
+
+	TArray64<uint8> CompressedData;
+	if ( ! FImageUtils::CompressImage(CompressedData,TEXT("PNG"),Image) )
+	{
+		return ;
+	}
+
+	FString imagePath = FPaths::ProjectPersistentDownloadDir()+"/Painted.jpg";
+
+	// 경로함수 FPaths::ProjectPersistentDownloadDir() :
+	// ==> 결과 : ../../../../../../../../Users/(사용자명)/Desktop/General/Project/Prototype/(언리얼 프로젝트명)/PersistentDownload
+	// 실제로  C:\UnrealProjects\HttpProject\Saved\PersistentDownloadDir 에 저장.
+
+	FFileHelper::SaveArrayToFile(CompressedData,*imagePath);
+}
 
