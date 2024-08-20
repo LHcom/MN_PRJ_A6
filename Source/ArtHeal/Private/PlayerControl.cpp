@@ -7,7 +7,14 @@
 #include <EnhancedInputComponent.h>
 #include <InputTriggers.h>
 #include<Camera/CameraComponent.h>
+
+#include "DrawDebugHelpers.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
+#include "YJ/PaintTarget.h"
 
 // Sets default values
 APlayerControl::APlayerControl()
@@ -41,8 +48,6 @@ APlayerControl::APlayerControl()
 	tpsCamComp->bUsePawnControlRotation = false;
 	//bUseControllerRotationYaw = false;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
-
-
 }
 
 // Called when the game starts or when spawned
@@ -79,6 +84,7 @@ void APlayerControl::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		PlayerInput->BindAction(ia_LookUp, ETriggerEvent::Triggered, this, &APlayerControl::LookUp);
 
 		PlayerInput->BindAction(ia_Move, ETriggerEvent::Triggered, this, &APlayerControl::Move);
+		PlayerInput->BindAction(ia_Paint, ETriggerEvent::Triggered, this, &APlayerControl::Paint);
 	}
 }
 
@@ -115,6 +121,41 @@ void APlayerControl::PlayerMove(float DeltaTime) {
 	FVector P = P0 + vt;
 	SetActorLocation(P);
 	direction = FVector::ZeroVector;
+}
+
+void APlayerControl::Paint()
+{
+	FRotator ViewRotation;
+	FVector Viewlocation;
+	GetController()->GetPlayerViewPoint(Viewlocation, ViewRotation);
+
+	//FVector StartLocation = GetActorLocation();
+	FVector StartLocation = tpsCamComp->GetComponentLocation() + tpsCamComp->GetForwardVector()*10;
+
+	//FVector EndLocation = Viewlocation + ViewRotation.Vector() * fireTraceDistance;
+	FVector EndLocation = StartLocation + tpsCamComp->GetForwardVector()* fireTraceDistance;
+	
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	//CollisionParams. ???? ???. 
+	CollisionParams.AddIgnoredActor(this);
+	CollisionParams.bTraceComplex = true;
+	CollisionParams.bReturnFaceIndex = true;
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility,CollisionParams);
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
+	if (HitResult.bBlockingHit) //히트대상이 있을때 
+	{
+		AActor* hitActor = HitResult.GetActor();
+		APaintTarget* Paintable = Cast<APaintTarget>(hitActor);
+		if(Paintable)
+		{
+			FVector2D uv;
+			UGameplayStatics::FindCollisionUV(HitResult, 0, uv);
+
+			Paintable->Painted(0,uv,50);
+		}
+	}
 }
 
 

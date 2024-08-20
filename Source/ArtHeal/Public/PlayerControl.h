@@ -54,8 +54,16 @@ public:
 	class UInputAction* ia_Turn;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_Move;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* ia_Paint;
 
 	void PlayerMove(float DeltaTime);
+
+	UFUNCTION()
+	void Paint();
+	
+	UPROPERTY(EditAnywhere, Category = Mysetting)
+	int fireTraceDistance = 1800;
 
 
 };
