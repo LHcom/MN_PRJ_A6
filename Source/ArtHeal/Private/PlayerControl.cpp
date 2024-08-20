@@ -105,13 +105,15 @@ void APlayerControl::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 void APlayerControl::Turn(const FInputActionValue& inputValue)
 {
 	float value = inputValue.Get<float>();
-	AddControllerYawInput(value);
+	float turnRate = 0.4f;
+	AddControllerYawInput(value * turnRate);
 }
 
 void APlayerControl::LookUp(const FInputActionValue& inputValue)
 {
 	float value = inputValue.Get<float>();
-	AddControllerPitchInput(value);
+	float lookUpRate = 1.0f;
+	AddControllerPitchInput(value * lookUpRate);
 }
 
 void APlayerControl::Move(const FInputActionValue& inputValue)
@@ -139,6 +141,7 @@ void APlayerControl::PlayerMove(float DeltaTime) {
 
 void APlayerControl::Paint()
 {
+
 	FRotator ViewRotation;
 	FVector Viewlocation;
 	GetController()->GetPlayerViewPoint(Viewlocation, ViewRotation);

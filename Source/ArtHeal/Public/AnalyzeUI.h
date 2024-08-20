@@ -35,5 +35,7 @@ public:
 	void SetAnalysisText(FString Log); //분석글 텍스트 설정 함수
 
 	void SetApiActor(class AApiActor* actor); 
+
+	void SetDrawingImage();
 	
 };

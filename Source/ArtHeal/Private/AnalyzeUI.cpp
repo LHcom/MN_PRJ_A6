@@ -23,3 +23,8 @@ void UAnalyzeUI::SetAnalysisText(FString Log)
 void UAnalyzeUI::SetApiActor(AApiActor* actor)
 {
 }
+
+void UAnalyzeUI::SetDrawingImage()
+{
+
+}
