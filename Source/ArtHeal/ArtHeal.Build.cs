@@ -9,7 +9,7 @@ public class ArtHeal : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[]
-			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities","HTTP" });
+			{ "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "Json", "JsonUtilities","HTTP", "EnhancedInput" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
