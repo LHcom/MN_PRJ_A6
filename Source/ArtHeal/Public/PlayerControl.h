@@ -111,4 +111,7 @@ public:
 	void ShowMouseCursor(bool value);
 	
 	FString GetFormattedDateTime();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class ACameraActor* CameraActor;
 };

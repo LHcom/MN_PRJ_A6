@@ -29,6 +29,7 @@
 #include "YJ/PaintTarget.h"
 #include "PlayerAnim.h"
 #include "AnalyzeUI.h"
+#include "Camera/CameraActor.h"
 #include "Engine/TextureRenderTarget2D.h"
 
 
@@ -110,6 +111,8 @@ void APlayerControl::BeginPlay()
 	}
 
 	Paintable = Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this, APaintTarget::StaticClass()));
+
+	CameraActor = Cast<ACameraActor>(UGameplayStatics::GetActorOfClass(this, ACameraActor::StaticClass()));
 }
 
 // Called every frame
@@ -203,7 +206,8 @@ void APlayerControl::Paint()
 	}
 
 
-	FVector StartLocation = GetActorLocation();
+	//FVector StartLocation = GetActorLocation();
+	FVector StartLocation = CameraActor->GetActorLocation();
 
 	MyVector.X += 3.f;
 
