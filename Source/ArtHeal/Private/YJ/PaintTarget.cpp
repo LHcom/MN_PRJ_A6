@@ -3,6 +3,7 @@
 
 #include "YJ/PaintTarget.h"
 
+#include "AnalyzeUI.h"
 #include "DrawingUI.h"
 #include "ImageUtils.h"
 #include "PlayerControl.h"
@@ -56,11 +57,16 @@ void APaintTarget::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(handle, [this,Player]()
 	{
 		DrawingUI = Player->DrawingUI;
-
+		AnalyzeUI = Player->AnalyzeUI;
 
 		DrawingUI->SetImageMat();
 
 		DrawingUI->TempMat->SetTextureParameterValue(FName(TEXT("PaintTexture")), CRT_PaintMask);
+		
+		AnalyzeUI->SetDrawingImage();
+
+		AnalyzeUI->TempMat->SetTextureParameterValue(FName(TEXT("PaintTexture")), CRT_PaintMask);
+		
 	}, 1.f, false);
 	
 	

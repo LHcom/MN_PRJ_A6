@@ -36,7 +36,8 @@ void UAnalyzeUI::GetDrawingImage()
 
 void UAnalyzeUI::SetDrawingImage()
 {
-	
+	TempMat =UMaterialInstanceDynamic::Create(IMG_PaintMat,this);
+	DrawingImage->SetBrushFromMaterial(TempMat);	
 }
 
 

@@ -20,7 +20,7 @@ public:
 	UPROPERTY()
 	class AApiActor* ApiActor;
 
-	// JSON µ¥ÀÌÅÍ¸¦ ¹Þ¾Æ ÅØ½ºÆ® ºí·Ï¿¡ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+	// JSON ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Þ¾ï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
 	void SetAnalysisText(const FString& ImgTitle, const FString& RecogMsg);
 
 	UPROPERTY(meta = (BindWidget))
@@ -30,7 +30,13 @@ public:
 	class UTextBlock* AnalysisText;
 
 	UPROPERTY(meta = (BindWidget))
-	class UImage* DrawingImage; //³»°¡ ±×¸° ±×¸² ºÒ·¯¿Ã ÀÌ¹ÌÁö
+	class UImage* DrawingImage; //ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ ï¿½×¸ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½
+
+	UPROPERTY(EditAnywhere, Category = "Paint")
+	UMaterialInterface* IMG_PaintMat;
+
+	UPROPERTY(EditAnywhere, Category = "Paint")
+	UMaterialInstanceDynamic* TempMat;
 
 	UPROPERTY(EditAnywhere, Category = "Paint")
 	UMaterialInterface* BDIMG_PaintMat;

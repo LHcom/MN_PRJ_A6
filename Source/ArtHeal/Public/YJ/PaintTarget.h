@@ -46,4 +46,7 @@ public:
 
 	UPROPERTY()
 	class UDrawingUI* DrawingUI;
+
+	UPROPERTY()
+	class UAnalyzeUI* AnalyzeUI;
 };
