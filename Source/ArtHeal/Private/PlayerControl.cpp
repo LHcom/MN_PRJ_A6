@@ -213,7 +213,7 @@ void APlayerControl::SaveTexture()
 
 	FFileHelper::SaveArrayToFile(CompressedData,*imagePath);
 	
-	//ApiActor->ReqPostText("Painted.jpg",CompressedData);
+	ApiActor->ReqPostText(imagePath,CompressedData);
 }
 
 void APlayerControl::SetBrushNum(int32 num)
