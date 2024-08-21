@@ -33,17 +33,20 @@ protected:
 private:
 	FString ApiUrl = "http://172.16.16.169:8080/api/v1/files/upload"; // api url
 
-
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void ReqPostText(const FString& FileName, const TArray64<uint8>& FileBin);
+	void ReqPostText(const FString& FullFilePath, const TArray64<uint8>& FileBin);
 	void OnResPostText(FHttpRequestPtr Request, FHttpResponsePtr Response,
 	                   bool bConnectedSuccessfully);
 
-	void AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray64<uint8>& FileBin);
 	ParsingValue ParsingJsonValue(const FString& json);
 
-	
+	// File Upload
+	FString BoundaryLabel = FString();
+	FString BoundaryBegin = FString();
+	FString BoundaryEnd = FString();
+	FString AddData(FString Name, FString Value);
+	void ProcessResponse(FString ResponseContent);
 };

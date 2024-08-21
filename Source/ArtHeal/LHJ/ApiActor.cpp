@@ -1,7 +1,6 @@
 #include "../LHJ/ApiActor.h"
 #include "HttpModule.h"
 
-
 AApiActor::AApiActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,43 +16,108 @@ void AApiActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AApiActor::ReqPostText(const FString& FileName, const TArray64<uint8>& FileBin)
+TArray<uint8> FStringToUint8(const FString& InString)
 {
-	// HTTP 모듈 인스턴스 가져오기
-	FHttpModule& HttpModule = FHttpModule::Get();
-	// HTTP 요청 생성
-	TSharedRef<IHttpRequest> req = HttpModule.CreateRequest();
-	// 요청 URL 설정
-	req->SetURL(ApiUrl);
-	// 요청 방식 설정 (GET)
-	req->SetVerb("POST");
-	// 요청 헤더 설정 (선택 사항)
-	req->SetHeader(TEXT("Content-Type"), TEXT("multipart/form-data"));
-	AppendContentBody(req, FileName, FileBin);
-	
-	// 응답 처리 콜백 바인딩
-	req->OnProcessRequestComplete().BindUObject(this, &AApiActor::OnResPostText);
-	// 요청 전송
-	req->ProcessRequest();
+	TArray<uint8> OutBytes;
+ 
+	// Handle empty strings
+	if (InString.Len() > 0)
+	{
+		FTCHARToUTF8 Converted(*InString); // Convert to UTF8
+		OutBytes.Append(reinterpret_cast<const uint8*>(Converted.Get()), Converted.Length());
+	}
+ 
+	return OutBytes;
+}
+ 
+FString AApiActor::AddData(FString Name, FString Value) {
+	return FString(TEXT("\r\n"))
+		+ BoundaryBegin
+		+ FString(TEXT("Content-Disposition: form-data; name=\""))
+		+ Name
+		+ FString(TEXT("\"\r\n\r\n"))
+		+ Value;
 }
 
-void AApiActor::AppendContentBody(TSharedRef<IHttpRequest>& req, const FString& FileName, const TArray64<uint8>& FileBin)
+void AApiActor::ProcessResponse(FString ResponseContent)
 {
-	FString body;
-	body.Append(TEXT("Content-Disposition: form-data; name=\"profile_image\"; filename=\"ProfileImage.png\"\r\n"));
-	body.Append(TEXT("Content-Type: application/octet-stream\r\n\r\n"));
+	// Here you can process the response body
+	UE_LOG(LogTemp, Error, TEXT("Response: %s"), *ResponseContent);
+}
 
-	// 파일 데이터 추가
-	for (uint8 Byte : FileBin)
-	{
-		body.AppendChar((TCHAR)Byte);
-	}
-	body.Append(TEXT("\r\n"));
-
-	body.Append(TEXT("Content-Disposition: form-data; name=\"imgData\"\r\n\r\n"));
-	body.Append(FString::Printf(TEXT("%s\r\n"), *FileName));
+void AApiActor::ReqPostText(const FString& FullFilePath, const TArray64<uint8>& FileBin)
+{
+	FString FileName = FPaths::GetCleanFilename(FullFilePath);
+ 
+	FHttpModule& HttpModule = FHttpModule::Get();
+	TSharedRef<IHttpRequest> HttpRequest = HttpModule.CreateRequest();
+ 
+	// We set the api URL
+	HttpRequest->SetURL(ApiUrl);
 	
-	req->SetContentAsString(body);
+	// We set verb of the request (GET/PUT/POST)
+	HttpRequest->SetVerb(TEXT("POST")); 
+ 
+	// Create a boundary label, for the header
+	BoundaryLabel = FString(TEXT("e543322540af456f9a3773049ca02529-")) + FString::FromInt(FMath::Rand());
+	// boundary label for begining of every payload chunk 
+	BoundaryBegin = FString(TEXT("--")) + BoundaryLabel + FString(TEXT("\r\n"));
+	// boundary label for the end of payload
+	BoundaryEnd = FString(TEXT("\r\n--")) + BoundaryLabel + FString(TEXT("--\r\n"));
+ 
+	// Set the content-type for server to know what are we going to send
+	HttpRequest->SetHeader(TEXT("Content-Type"), FString(TEXT("multipart/form-data; boundary=")) + BoundaryLabel);
+ 
+	// This is binary content of the request
+	TArray<uint8> CombinedContent; 
+ 
+	// First, we add the boundary for the file, which is different from text payload
+	FString FileBoundaryString = FString(TEXT("\r\n"))
+		+ BoundaryBegin
+		+ FString(TEXT("Content-Disposition: form-data; name=\"file\"; filename=\""))
+		+ FileName + "\"\r\n"
+		+ "Content-Type: image/jpeg"
+		+ FString(TEXT("\r\n\r\n"));
+		
+	// Notice, we convert all strings into uint8 format using FStringToUint8
+	CombinedContent.Append(FStringToUint8(FileBoundaryString));
+	
+	// Append the file data
+	CombinedContent.Append(FileBin);
+	
+	// Let's add couple of text values to the payload
+	CombinedContent.Append(FStringToUint8(AddData("imgData", FileName)));
+ 
+	// Finally, add a boundary at the end of the payload
+	CombinedContent.Append(FStringToUint8(BoundaryEnd));
+ 
+	// Set the request content
+	HttpRequest->SetContent(CombinedContent); 
+ 
+	// Hook a lambda(anonymous function) to when we receive a response
+	HttpRequest->OnProcessRequestComplete().BindUObject(this, &AApiActor::OnResPostText);
+	// HttpRequest->OnProcessRequestComplete().BindLambda(
+	// 	[this](
+	// 		FHttpRequestPtr pRequest,
+	// 		FHttpResponsePtr pResponse,
+	// 		bool connectedSuccessfully) mutable {
+	// 			UE_LOG(LogTemp, Error, TEXT("Connection."));
+ //
+	// 			if (connectedSuccessfully) {
+	// 				ProcessResponse(pResponse->GetContentAsString());
+	// 			}
+	// 			else {
+	// 				switch (pRequest->GetStatus()) {
+	// 				case EHttpRequestStatus::Failed_ConnectionError:
+	// 					UE_LOG(LogTemp, Error, TEXT("Connection failed."));
+	// 				default:
+	// 					UE_LOG(LogTemp, Error, TEXT("Request failed."));
+	// 				}
+	// 			}
+	// 	});
+ 
+	// Send the request 
+	HttpRequest->ProcessRequest();
 }
 
 ParsingValue AApiActor::ParsingJsonValue(const FString& json)
@@ -80,7 +144,7 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 				stParsingValue.recogMsg = result->GetStringField(TEXT("recogMsg"));
 			if (result->HasField(TEXT("mnStatus")))
 				stParsingValue.mnStatus = result->GetStringField(TEXT("mnStatus")                                             );
-		}
+		} 
 	}
 	return stParsingValue;
 }
