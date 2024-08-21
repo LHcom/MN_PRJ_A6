@@ -23,11 +23,17 @@ public:
 	// JSON �����͸� �޾� �ؽ�Ʈ ��Ͽ� �����ϴ� �Լ�
 	void SetAnalysisText(const FString& ImgTitle, const FString& RecogMsg);
 
+	UPROPERTY()
+	class APlayerControl* player;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ImgTitleText;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* AnalysisText;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* QuitButton; 
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* DrawingImage; //���� �׸� �׸� �ҷ��� �̹���
@@ -44,4 +50,7 @@ public:
 
 	UFUNCTION()
 	void GetDrawingImage();
+
+	UFUNCTION()
+	void OnClickHidden();
 };

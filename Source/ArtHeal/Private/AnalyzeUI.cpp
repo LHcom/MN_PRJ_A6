@@ -10,10 +10,14 @@
 #include "IImageWrapperModule.h"
 #include "IImageWrapper.h"
 #include "Modules/ModuleManager.h"
+#include "Components/Button.h"
+#include "PlayerControl.h"
 
 void UAnalyzeUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+
+	QuitButton->OnClicked.AddDynamic(this, &UAnalyzeUI::OnClickHidden);
 }
 
 void UAnalyzeUI::SetAnalysisText(const FString& ImgTitle, const FString& RecogMsg)
@@ -32,6 +36,16 @@ void UAnalyzeUI::SetAnalysisText(const FString& ImgTitle, const FString& RecogMs
 void UAnalyzeUI::GetDrawingImage()
 {
 	
+}
+
+void UAnalyzeUI::OnClickHidden()
+{
+	SetVisibility(ESlateVisibility::Hidden);
+
+	player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	player->pc->SetShowMouseCursor(false);
+	player->pc->SetInputMode(FInputModeGameOnly());
+
 }
 
 void UAnalyzeUI::SetDrawingImage()
