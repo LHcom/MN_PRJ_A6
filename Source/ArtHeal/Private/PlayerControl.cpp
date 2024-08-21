@@ -39,8 +39,8 @@ APlayerControl::APlayerControl()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 1. ���̷�Ż �޽� �����͸� �ҷ����� �ʹ�. TEXT ������ ������ ���
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(
-		TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin'"));
+
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/Bada/Animation/Player.Player'"));
 	//���� ������ �ε��ϴµ� �����Ѵٸ�
 	if (TempMesh.Succeeded())
 	{
