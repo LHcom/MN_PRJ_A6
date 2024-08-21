@@ -1,5 +1,9 @@
 #include "../LHJ/ApiActor.h"
+
+#include "AnalyzeUI.h"
 #include "HttpModule.h"
+#include "GameFramework/HUD.h"
+#include "Kismet/GameplayStatics.h"
 
 AApiActor::AApiActor()
 {
@@ -19,18 +23,19 @@ void AApiActor::Tick(float DeltaTime)
 TArray<uint8> FStringToUint8(const FString& InString)
 {
 	TArray<uint8> OutBytes;
- 
+
 	// Handle empty strings
 	if (InString.Len() > 0)
 	{
 		FTCHARToUTF8 Converted(*InString); // Convert to UTF8
 		OutBytes.Append(reinterpret_cast<const uint8*>(Converted.Get()), Converted.Length());
 	}
- 
+
 	return OutBytes;
 }
- 
-FString AApiActor::AddData(FString Name, FString Value) {
+
+FString AApiActor::AddData(FString Name, FString Value)
+{
 	return FString(TEXT("\r\n"))
 		+ BoundaryBegin
 		+ FString(TEXT("Content-Disposition: form-data; name=\""))
@@ -48,52 +53,52 @@ void AApiActor::ProcessResponse(FString ResponseContent)
 void AApiActor::ReqPostText(const FString& FullFilePath, const TArray64<uint8>& FileBin)
 {
 	FString FileName = FPaths::GetCleanFilename(FullFilePath);
- 
+
 	FHttpModule& HttpModule = FHttpModule::Get();
 	TSharedRef<IHttpRequest> HttpRequest = HttpModule.CreateRequest();
- 
+
 	// We set the api URL
 	HttpRequest->SetURL(ApiUrl);
-	
+
 	// We set verb of the request (GET/PUT/POST)
-	HttpRequest->SetVerb(TEXT("POST")); 
- 
+	HttpRequest->SetVerb(TEXT("POST"));
+
 	// Create a boundary label, for the header
 	BoundaryLabel = FString(TEXT("e543322540af456f9a3773049ca02529-")) + FString::FromInt(FMath::Rand());
 	// boundary label for begining of every payload chunk 
 	BoundaryBegin = FString(TEXT("--")) + BoundaryLabel + FString(TEXT("\r\n"));
 	// boundary label for the end of payload
 	BoundaryEnd = FString(TEXT("\r\n--")) + BoundaryLabel + FString(TEXT("--\r\n"));
- 
+
 	// Set the content-type for server to know what are we going to send
 	HttpRequest->SetHeader(TEXT("Content-Type"), FString(TEXT("multipart/form-data; boundary=")) + BoundaryLabel);
- 
+
 	// This is binary content of the request
-	TArray<uint8> CombinedContent; 
- 
+	TArray<uint8> CombinedContent;
+
 	// First, we add the boundary for the file, which is different from text payload
 	FString FileBoundaryString = FString(TEXT("\r\n"))
 		+ BoundaryBegin
-		+ FString(TEXT("Content-Disposition: form-data; name=\"file\"; filename=\""))
+		+ FString(TEXT("Content-Disposition: form-data; name=\"imgData\"; filename=\""))
 		+ FileName + "\"\r\n"
 		+ "Content-Type: image/jpeg"
 		+ FString(TEXT("\r\n\r\n"));
-		
+
 	// Notice, we convert all strings into uint8 format using FStringToUint8
 	CombinedContent.Append(FStringToUint8(FileBoundaryString));
-	
+
 	// Append the file data
 	CombinedContent.Append(FileBin);
-	
+
 	// Let's add couple of text values to the payload
-	CombinedContent.Append(FStringToUint8(AddData("imgData", FileName)));
- 
+	//CombinedContent.Append(FStringToUint8(AddData("imgData", FileName)));
+
 	// Finally, add a boundary at the end of the payload
 	CombinedContent.Append(FStringToUint8(BoundaryEnd));
- 
+
 	// Set the request content
-	HttpRequest->SetContent(CombinedContent); 
- 
+	HttpRequest->SetContent(CombinedContent);
+
 	// Hook a lambda(anonymous function) to when we receive a response
 	HttpRequest->OnProcessRequestComplete().BindUObject(this, &AApiActor::OnResPostText);
 	// HttpRequest->OnProcessRequestComplete().BindLambda(
@@ -102,7 +107,7 @@ void AApiActor::ReqPostText(const FString& FullFilePath, const TArray64<uint8>& 
 	// 		FHttpResponsePtr pResponse,
 	// 		bool connectedSuccessfully) mutable {
 	// 			UE_LOG(LogTemp, Error, TEXT("Connection."));
- //
+	//
 	// 			if (connectedSuccessfully) {
 	// 				ProcessResponse(pResponse->GetContentAsString());
 	// 			}
@@ -115,7 +120,7 @@ void AApiActor::ReqPostText(const FString& FullFilePath, const TArray64<uint8>& 
 	// 				}
 	// 			}
 	// 	});
- 
+
 	// Send the request 
 	HttpRequest->ProcessRequest();
 }
@@ -142,9 +147,15 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 				stParsingValue.imgTitle = result->GetStringField(TEXT("imgTitle"));
 			if (result->HasField(TEXT("recogMsg")))
 				stParsingValue.recogMsg = result->GetStringField(TEXT("recogMsg"));
-			if (result->HasField(TEXT("mnStatus")))
-				stParsingValue.mnStatus = result->GetStringField(TEXT("mnStatus")                                             );
-		} 
+
+			// AnalyzeUI를 찾아서 데이터 전달
+			UAnalyzeUI* AnalyzeUI = Cast<UAnalyzeUI>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD()->GetUserWidgetObject());
+			if (AnalyzeUI)
+			{
+				// 파싱된 imgTitle과 recogMsg 값을 UI에 설정
+				AnalyzeUI->SetAnalysisText(stParsingValue.imgTitle, stParsingValue.recogMsg);
+			}
+		}
 	}
 	return stParsingValue;
 }
