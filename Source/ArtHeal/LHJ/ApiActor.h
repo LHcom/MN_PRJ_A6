@@ -10,11 +10,29 @@
 
 struct ParsingValue
 {
-	int32 returnCode;	// 리턴 코드
-	FString returnMsg;	// 리턴 메세지
-	FString imgTitle;	// 이미지 제목
-	FString recogMsg;	// 인식 내용
+	int32 returnCode; // 리턴 코드
+	FString returnMsg; // 리턴 메세지
+	FString imgTitle; // 이미지 제목
+	FString recogMsg; // 인식 내용
 };
+
+
+// struct FWavHeader
+// {
+// 	uint8 ChunkID[4];
+// 	uint32 ChunkSize;
+// 	uint8 Format[4];
+// 	uint8 Subchunk1ID[4];
+// 	uint32 Subchunk1Size;
+// 	uint16 AudioFormat;
+// 	uint16 NumChannels;
+// 	uint32 SampleRate;
+// 	uint32 ByteRate;
+// 	uint16 BlockAlign;
+// 	uint16 BitsPerSample;
+// 	uint8 Subchunk2ID[4];
+// 	uint32 Subchunk2Size;
+// };
 
 UCLASS()
 class ARTHEAL_API AApiActor : public AActor
@@ -50,5 +68,16 @@ public:
 	FString AddData(FString Name, FString Value);
 	void ProcessResponse(FString ResponseContent);
 
+	// Wav Download
+	// UFUNCTION(BlueprintCallable)
+	// void WavFileDownload(FString DownloadURL, FString SaveFullPath);
+	// void OnResDownloadWav(FHttpRequestPtr Request, FHttpResponsePtr Response,
+	// 				   bool bConnectedSuccessfully);
 
+	//UFUNCTION(BlueprintCallable)
+	//void PlaySoundFromFile(const FString& FilePath);
+
+	// UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	// void LoadWavFile(const FString& FilePath);
+	// FString SaveWavPath;
 };
