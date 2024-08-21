@@ -40,12 +40,29 @@ void UDrawingUI::OnMyClickSend()
     PlayAnimationForward(Loading);
 
     //그다음 분석 UI로 넘어가도록 코드 작성
-    player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
-    player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+    FTimerHandle handle;
+
+    // 5초 뒤에 분석 UI로 넘어가도록 타이머 설정 (람다 사용)
+    GetWorld()->GetTimerManager().SetTimer(handle, [this]()
+        {
+            if (player)
+            {
+                player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
+                player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+            }
+        }, 5.0f, false);
+
+
+    // 주제가 설정되지 않았다면 설정
+    if (!bIsArtTitleSet)
+    {
+        SetArtTitle();
+    }
 
 	player->pc->SetViewTargetWithBlend(player);
 	player->bPainting = false;
 }
+
 
 void UDrawingUI::GetImageMat()
 {
@@ -60,10 +77,19 @@ void UDrawingUI::SetImageMat()
 
 void UDrawingUI::SetArtTitle()
 {
+    // 주제가 이미 설정된 경우 아무것도 하지 않음
+    if (bIsArtTitleSet)
+    {
+        return;
+    }
+
     FString RandomTopic = GetRandomTopic();
     UE_LOG(LogTemp, Warning, TEXT("Selected Topic: %s"), *RandomTopic);
 
     ArtTitle->SetText(FText::FromString(RandomTopic));
+
+    // 주제가 설정되었음을 표시
+    bIsArtTitleSet = true;
 
 }
 
@@ -168,3 +194,4 @@ void UDrawingUI::OnClickedColorBtn_8()
 {
 	player->SetBrushNum(8);
 }
+

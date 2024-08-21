@@ -89,6 +89,7 @@ void APlayerControl::BeginPlay()
 	{
 		DrawingUI->AddToViewport();
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+		DrawingUI->SetArtTitle();
 	}
 
 	AnalyzeUI = CreateWidget<UAnalyzeUI>(GetWorld(), AnalyzeUIFactory);
@@ -149,24 +150,26 @@ void APlayerControl::LookUp(const FInputActionValue& inputValue)
 void APlayerControl::Move(const FInputActionValue& inputValue)
 {
 	FVector2D value = inputValue.Get<FVector2D>();
-	//���� �Է� �̺�Ʈ ó��
 	direction.X = value.X;
-	// �¿� �Է� �̺�Ʈ ó��
 	direction.Y = value.Y;
-	// ���� ���� ����ȭ, �밢���ϸ� �ӵ� �������� �ʰ� �ϱ�
 	direction.Normalize();
 }
 
 
 //�÷��̾� �̵�ó�� �Լ�
 void APlayerControl::PlayerMove(float DeltaTime) {
-	FVector normalizedDirection = FTransform(GetControlRotation()).TransformVector(direction);
+	/*FVector normalizedDirection = FTransform(GetControlRotation()).TransformVector(direction);
 	normalizedDirection.Normalize();
 
 	FVector P0 = GetActorLocation();
 	FVector vt = normalizedDirection * walkSpeed * DeltaTime;
 	FVector P = P0 + vt;
 	SetActorLocation(P);
+	direction = FVector::ZeroVector;*/
+
+	direction = FTransform(GetControlRotation()).TransformVector(direction);
+
+	AddMovementInput(direction);
 	direction = FVector::ZeroVector;
 }
 
