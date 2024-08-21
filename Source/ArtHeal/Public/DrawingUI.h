@@ -102,5 +102,12 @@ public:
 	
 	UPROPERTY()
 	class APaintTarget* PaintTarget;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim),Transient,Category = StandBy)
+	class UWidgetAnimation* Loading;
+
+	UPROPERTY(EditAnywhere, Category = UIImage)
+	class UImage* Airplane;
+
 };
 

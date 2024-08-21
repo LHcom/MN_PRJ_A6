@@ -24,6 +24,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "YJ/PaintTarget.h"
 #include "PlayerAnim.h"
+#include "AnalyzeUI.h"
 
 // Sets default values
 APlayerControl::APlayerControl()
@@ -89,6 +90,14 @@ void APlayerControl::BeginPlay()
 		DrawingUI->AddToViewport();
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	AnalyzeUI = CreateWidget<UAnalyzeUI>(GetWorld(), AnalyzeUIFactory);
+	if (AnalyzeUI) {
+		AnalyzeUI->AddToViewport();
+		AnalyzeUI->SetVisibility(ESlateVisibility::Hidden);
+	}
+
+
 
 	Paintable =Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this,APaintTarget::StaticClass()));
 	
@@ -240,7 +249,7 @@ void APlayerControl::SaveTexture()
 	}
 
 	TArray64<uint8> CompressedData;
-	if ( ! FImageUtils::CompressImage(CompressedData,TEXT("PNG"),Image) )
+	if ( ! FImageUtils::CompressImage(CompressedData,TEXT("JPEG"),Image) )
 	{
 		return ;
 	}
