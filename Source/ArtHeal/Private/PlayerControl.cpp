@@ -56,6 +56,7 @@ APlayerControl::APlayerControl()
 	tpsCamComp->SetupAttachment(springArmComp);
 	tpsCamComp->bUsePawnControlRotation = false;
 	//bUseControllerRotationYaw = false;
+	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 }
 
@@ -64,7 +65,7 @@ void APlayerControl::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	auto pc = Cast<APlayerController>(Controller);
+	pc = Cast<APlayerController>(Controller);
 	if (pc) {
 		auto subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
 		if (subsystem) {
@@ -113,11 +114,16 @@ void APlayerControl::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		PlayerInput->BindAction(ia_Move, ETriggerEvent::Triggered, this, &APlayerControl::Move);
 		PlayerInput->BindAction(ia_Paint, ETriggerEvent::Triggered, this, &APlayerControl::Paint);
+	
 	}
 }
 
 void APlayerControl::Turn(const FInputActionValue& inputValue)
 {
+	if(bPainting)
+	{
+		return;
+	}
 	float value = inputValue.Get<float>();
 	float turnRate = 0.4f;
 	AddControllerYawInput(value * turnRate);
@@ -125,6 +131,10 @@ void APlayerControl::Turn(const FInputActionValue& inputValue)
 
 void APlayerControl::LookUp(const FInputActionValue& inputValue)
 {
+	if(bPainting)
+	{
+		return;
+	}
 	float value = inputValue.Get<float>();
 	float lookUpRate = 1.0f;
 	AddControllerPitchInput(value * lookUpRate);
@@ -141,6 +151,7 @@ void APlayerControl::Move(const FInputActionValue& inputValue)
 	direction.Normalize();
 }
 
+
 //�÷��̾� �̵�ó�� �Լ�
 void APlayerControl::PlayerMove(float DeltaTime) {
 	FVector normalizedDirection = FTransform(GetControlRotation()).TransformVector(direction);
@@ -155,33 +166,62 @@ void APlayerControl::PlayerMove(float DeltaTime) {
 
 void APlayerControl::Paint()
 {
-	FRotator ViewRotation;
-	FVector Viewlocation;
-	GetController()->GetPlayerViewPoint(Viewlocation, ViewRotation);
-
-	//FVector StartLocation = GetActorLocation();
-	FVector StartLocation = tpsCamComp->GetComponentLocation() + tpsCamComp->GetForwardVector()*10;
-
-	//FVector EndLocation = Viewlocation + ViewRotation.Vector() * fireTraceDistance;
-	FVector EndLocation = StartLocation + tpsCamComp->GetForwardVector()* fireTraceDistance;
 	
-	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	//CollisionParams. ???? ???. 
-	CollisionParams.AddIgnoredActor(this);
-	CollisionParams.bTraceComplex = true;
-	CollisionParams.bReturnFaceIndex = true;
-
-	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility,CollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
-	if (HitResult.bBlockingHit) //��Ʈ����� ������ 
+	FHitResult CursorHit;
+	pc->GetHitResultUnderCursor(ECC_Visibility, false, CursorHit);
+	
+	if(CursorHit.GetActor())
 	{
-		AActor* hitActor = HitResult.GetActor();
+		AActor* hitActor = CursorHit.GetActor();
 		Paintable = Cast<APaintTarget>(hitActor);
 		if(Paintable)
 		{
+			FVector_NetQuantize ImpactPoint =CursorHit.ImpactPoint;
+			MyVector = FVector(ImpactPoint);
+			FString VectorString = MyVector.ToString();
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, VectorString);
+		}
+	}
+	
+	
+	FVector StartLocation =GetActorLocation();
+
+	MyVector.X+=3.f;
+	
+	FVector EndLocation = MyVector;
+	
+	FString VectorString = EndLocation.ToString();
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, VectorString);
+	
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+	CollisionParams.bTraceComplex = true;
+	CollisionParams.bReturnFaceIndex = true;
+	
+	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility,CollisionParams);
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
+	
+	if (HitResult.bBlockingHit)  
+	{
+		AActor* hitActor = HitResult.GetActor();
+		Paintable = Cast<APaintTarget>(hitActor);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, "HitResult_Success");
+		if(Paintable)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, "Paintable_Success");
+			
 			FVector2D uv;
-			UGameplayStatics::FindCollisionUV(HitResult, 0, uv);
+			
+			bool result =UGameplayStatics::FindCollisionUV(HitResult, 0, uv);
+
+			FString VectorString_ = uv.ToString();
+
+			// On-Screen Debug 메시지로 출력
+			
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, VectorString_);
+
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, result ? TEXT("bIsTrue: true") : TEXT("bIsTrue: false"));
 			
 			Paintable->Painted(brushNum,uv,50);
 		}
@@ -223,7 +263,7 @@ void APlayerControl::SetBrushNum(int32 num)
 
 void APlayerControl::SetDrawingUIVisible(bool value)
 {
-	auto pc = Cast<APlayerController>(Controller);
+	//auto pc = Cast<APlayerController>(Controller);
 	if(value)
 	{
 		pc->SetShowMouseCursor(true);
@@ -232,9 +272,10 @@ void APlayerControl::SetDrawingUIVisible(bool value)
 	}
 	else
 	{
-		pc->SetShowMouseCursor(false);
-		pc->SetInputMode(FInputModeGameOnly());
+		//pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameAndUI());
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
+
 

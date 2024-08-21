@@ -57,6 +57,7 @@ public:
 	class UInputAction* ia_Move;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* ia_Paint;
+	
 
 	void PlayerMove(float DeltaTime);
 
@@ -90,7 +91,13 @@ public:
 	UFUNCTION()
 	void SetBrushNum(int32 num);
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetDrawingUIVisible(bool value);
-	
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 bPainting=false;
+	UPROPERTY()
+	APlayerController* pc;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FVector MyVector;
 };
