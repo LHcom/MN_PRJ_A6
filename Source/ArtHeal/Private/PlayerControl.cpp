@@ -232,7 +232,7 @@ void APlayerControl::Paint()
 
 			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, result ? TEXT("bIsTrue: true") : TEXT("bIsTrue: false"));
 			
-			Paintable->Painted(brushNum,uv,50);
+			Paintable->Painted(brushNum,uv,70);
 		}
 	}
 }
