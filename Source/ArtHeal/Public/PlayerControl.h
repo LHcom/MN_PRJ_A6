@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/TextureRenderTarget2D.h"
 #include "GameFramework/Character.h"
 #include "PlayerControl.generated.h"
 
@@ -111,5 +110,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShowMouseCursor(bool value);
 	
-	
+	FString GetFormattedDateTime();
 };
