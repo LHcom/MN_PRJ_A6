@@ -5,7 +5,11 @@
 #include "../LHJ/ApiActor.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
-#include "JsonParseLib.h"
+#include "Engine/Texture2D.h"
+#include "Misc/FileHelper.h"
+#include "IImageWrapperModule.h"
+#include "IImageWrapper.h"
+#include "Modules/ModuleManager.h"
 
 void UAnalyzeUI::NativeConstruct()
 {
@@ -25,6 +29,14 @@ void UAnalyzeUI::SetAnalysisText(const FString& ImgTitle, const FString& RecogMs
 	}
 }
 
+void UAnalyzeUI::GetDrawingImage()
+{
+	
+}
+
 void UAnalyzeUI::SetDrawingImage()
 {
+	
 }
+
+
