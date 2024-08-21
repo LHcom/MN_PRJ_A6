@@ -43,6 +43,11 @@ void ADoorTrigger::BeginPlay()
 	if (DoorSequence)
 	{
 		LevelPlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), DoorSequence, Settings, LevelActor);
+		if (!LevelPlayer)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to create Level Sequence Player."));
+			return;
+		}
 	}
 	
 }
@@ -58,7 +63,10 @@ void ADoorTrigger::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
+	UE_LOG(LogTemp, Warning, TEXT("d1"));
+
 	if (LevelPlayer) {
+		UE_LOG(LogTemp, Warning, TEXT("d2"));
 		LevelPlayer->Play();
 	}
 }
@@ -66,7 +74,9 @@ void ADoorTrigger::NotifyActorBeginOverlap(AActor* OtherActor)
 void ADoorTrigger::NotifyActorEndOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorEndOverlap(OtherActor);
+	UE_LOG(LogTemp, Warning, TEXT("c1"));
 	if (LevelPlayer) {
+		UE_LOG(LogTemp, Warning, TEXT("c2"));
 		LevelPlayer->PlayReverse();
 	}
 }
