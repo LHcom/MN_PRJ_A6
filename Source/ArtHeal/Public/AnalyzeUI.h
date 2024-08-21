@@ -20,20 +20,18 @@ public:
 	UPROPERTY()
 	class AApiActor* ApiActor;
 
-	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* AnalysisText; //분석글 텍스트
+	// JSON 데이터를 받아 텍스트 블록에 설정하는 함수
+	void SetAnalysisText(const FString& ImgTitle, const FString& RecogMsg);
+
+	void SetDrawingImage();
 
 	UPROPERTY(meta = (BindWidget))
-	class UImage* StateImage; //상태 표현 이미지
+	UTextBlock* ImgTitleText;
 
 	UPROPERTY(meta = (BindWidget))
-	class UImage* DrawingImage; //내가 그린 그림 불러올 이미지, 건드리지 말것
+	UTextBlock* AnalysisText;
 
-	UFUNCTION()
-	void OnMyClickRecieve(); //분석 글 받기
-
-	void SetAnalysisText(FString Log); //분석글 텍스트 설정 함수
-
-	void SetApiActor(class AApiActor* actor); 
+	UPROPERTY(meta = (BindWidget))
+	class UImage* DrawingImage; //내가 그린 그림 불러올 이미지
 	
 };

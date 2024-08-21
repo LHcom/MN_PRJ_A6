@@ -5,21 +5,26 @@
 #include "../LHJ/ApiActor.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "JsonParseLib.h"
 
 void UAnalyzeUI::NativeConstruct()
 {
 	Super::NativeConstruct();
 }
 
-void UAnalyzeUI::OnMyClickRecieve()
+void UAnalyzeUI::SetAnalysisText(const FString& ImgTitle, const FString& RecogMsg)
 {
+	if (ImgTitleText)
+	{
+		ImgTitleText->SetText(FText::FromString(ImgTitle));
+	}
 
+	if (AnalysisText)
+	{
+		AnalysisText->SetText(FText::FromString(RecogMsg));
+	}
 }
 
-void UAnalyzeUI::SetAnalysisText(FString Log)
-{
-}
-
-void UAnalyzeUI::SetApiActor(AApiActor* actor)
+void UAnalyzeUI::SetDrawingImage()
 {
 }

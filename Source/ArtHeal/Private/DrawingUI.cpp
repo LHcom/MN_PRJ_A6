@@ -36,6 +36,9 @@ void UDrawingUI::OnMyClickSend()
 	FString FullURL;
 	//= FString::Printf(TEXT("%s?serviceKey=%s&pageNo=%d&numOfRows=%d"));
 	player->SaveTexture();
+    PlayAnimationForward(Loading);
+
+    //그다음 분석 UI로 넘어가도록 코드 작성
 }
 
 void UDrawingUI::GetImageMat()
@@ -55,7 +58,6 @@ void UDrawingUI::SetArtTitle()
     UE_LOG(LogTemp, Warning, TEXT("Selected Topic: %s"), *RandomTopic);
 
     ArtTitle->SetText(FText::FromString(RandomTopic));
-
 
 }
 
