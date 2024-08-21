@@ -28,6 +28,7 @@ void UDrawingUI::NativeConstruct()
 	Button_6->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_6);
 	Button_7->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_7);
 	Button_8->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_8);
+	EraseButton->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedEraseButton);
 
 	//PaintTarget =player->Paintable;
 }
@@ -152,22 +153,25 @@ void UDrawingUI::OnClickedColorBtn_0()
 	// 버튼을 누르면 브러쉬의 mat 변수에 값을 변경하여 색깔을 변경하고 싶다
 	// 캐릭터가 그릴때 브러쉬 넘버를 보내기때문에
 	player->SetBrushNum(0);
-	
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_1()
 {
 	player->SetBrushNum(1);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_2()
 {
 	player->SetBrushNum(2);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_3()
 {
 	player->SetBrushNum(3);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_4()
@@ -178,20 +182,30 @@ void UDrawingUI::OnClickedColorBtn_4()
 void UDrawingUI::OnClickedColorBtn_5()
 {
 	player->SetBrushNum(5);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_6()
 {
 	player->SetBrushNum(6);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_7()
 {
 	player->SetBrushNum(7);
+	player->SetBrushSize(70);
 }
 
 void UDrawingUI::OnClickedColorBtn_8()
 {
 	player->SetBrushNum(8);
+	player->SetBrushSize(70);
+}
+
+void UDrawingUI::OnClickedEraseButton()
+{
+	player->SetBrushNum(9);
+	player->SetBrushSize(110);
 }
 

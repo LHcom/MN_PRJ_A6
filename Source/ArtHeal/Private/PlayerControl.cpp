@@ -243,7 +243,7 @@ void APlayerControl::Paint()
 
 			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, result ? TEXT("bIsTrue: true") : TEXT("bIsTrue: false"));
 
-			Paintable->Painted(brushNum, uv, 70);
+			Paintable->Painted(brushNum, uv, brushSize);
 		}
 	}
 }
@@ -281,6 +281,11 @@ void APlayerControl::SaveTexture()
 void APlayerControl::SetBrushNum(int32 num)
 {
 	brushNum = num;
+}
+
+void APlayerControl::SetBrushSize(float num)
+{
+	brushSize =num;
 }
 
 void APlayerControl::SetDrawingUIVisible(bool value)

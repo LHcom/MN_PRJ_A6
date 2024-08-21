@@ -93,8 +93,12 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int32 brushNum;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float brushSize=70.f;
 	UFUNCTION()
 	void SetBrushNum(int32 num);
+	UFUNCTION()
+	void SetBrushSize(float num);
 	
 	UFUNCTION(BlueprintCallable)
 	void SetDrawingUIVisible(bool value);

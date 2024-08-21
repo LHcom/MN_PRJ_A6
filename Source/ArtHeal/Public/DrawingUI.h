@@ -53,6 +53,10 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Button_8;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* EraseButton;
+	
+
 	UFUNCTION()
 	void OnMyClickSend(); //�м��� ������ �Լ�
 
@@ -99,6 +103,8 @@ public:
 	void OnClickedColorBtn_7();
 	UFUNCTION()
 	void OnClickedColorBtn_8();
+	UFUNCTION()
+	void OnClickedEraseButton();
 	
 	UPROPERTY()
 	class APaintTarget* PaintTarget;
