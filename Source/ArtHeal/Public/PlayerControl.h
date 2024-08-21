@@ -78,8 +78,14 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Paint")
 	TSubclassOf<class UUserWidget> DrawingUIFactory;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UDrawingUI* DrawingUI;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Paint")
+	TSubclassOf<class UUserWidget> AnalyzeUIFactory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UAnalyzeUI* AnalyzeUI;
 
 	UPROPERTY()
 	class UPlayerAnim* anim;

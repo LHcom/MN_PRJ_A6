@@ -4,6 +4,8 @@
 #include "HttpModule.h"
 #include "GameFramework/HUD.h"
 #include "Kismet/GameplayStatics.h"
+#include "PlayerControl.h"
+#include "DrawingUI.h"
 
 AApiActor::AApiActor()
 {
@@ -148,12 +150,14 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 			if (result->HasField(TEXT("recogMsg")))
 				stParsingValue.recogMsg = result->GetStringField(TEXT("recogMsg"));
 
-			// AnalyzeUI를 찾아서 데이터 전달
-			UAnalyzeUI* AnalyzeUI = Cast<UAnalyzeUI>(UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetHUD()->GetUserWidgetObject());
-			if (AnalyzeUI)
+			// APlayerControl 캐스팅
+			APlayerControl* player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			if (player && player->AnalyzeUI)
 			{
-				// 파싱된 imgTitle과 recogMsg 값을 UI에 설정
-				AnalyzeUI->SetAnalysisText(stParsingValue.imgTitle, stParsingValue.recogMsg);
+				// AnalyzeUI 호출
+				player->AnalyzeUI->SetAnalysisText(stParsingValue.imgTitle, stParsingValue.recogMsg);
+				//player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+				//player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
 			}
 		}
 	}

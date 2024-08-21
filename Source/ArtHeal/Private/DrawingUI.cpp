@@ -8,6 +8,7 @@
 #include "ArtHeal/LHJ/ApiActor.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "AnalyzeUI.h"
 
 void UDrawingUI::NativeConstruct()
 {
@@ -39,6 +40,10 @@ void UDrawingUI::OnMyClickSend()
     PlayAnimationForward(Loading);
 
     //그다음 분석 UI로 넘어가도록 코드 작성
+    player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
+    player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+
+
 }
 
 void UDrawingUI::GetImageMat()
