@@ -26,10 +26,10 @@ public:
 	void SetDrawingImage();
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ImgTitleText;
+	class UTextBlock* ImgTitleText;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* AnalysisText;
+	class UTextBlock* AnalysisText;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* DrawingImage; //내가 그린 그림 불러올 이미지
