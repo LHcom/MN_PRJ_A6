@@ -5,6 +5,7 @@
 
 #include "DrawingUI.h"
 #include "PlayerControl.h"
+#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Camera/CameraActor.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -50,6 +51,9 @@ void ADrawTrigger::OnBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 		//마우스커서 보이기
 		Player->ShowMouseCursor(true);
 		Player->DrawingUI->SetVisibility(ESlateVisibility::Visible);
+		//Player->pc->SetInputMode(FInputModeGameAndUI());
+		//Player->pc->SetInputMode(FInputModeUIOnly());
+		//UWidgetBlueprintLibrary::SetInputMode_GameAndUIEx(Player->pc,nullptr)
 		Player->pc->SetViewTargetWithBlend(CameraActor);
 		
 	}
