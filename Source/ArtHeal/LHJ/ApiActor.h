@@ -48,8 +48,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	FString ApiUrl = "http://172.16.16.169:8080/api/v1/ai/upload"; // api url
 	//FString ApiUrl = "http://172.16.16.169:8080/api/v1/files/upload"; // api url
-	FString ApiUrl = "http://192.168.1.18:8080/api/v1/files/upload"; // api url
+	//FString ApiUrl = "http://192.168.1.18:8080/api/v1/files/upload"; // api url
 
 public:
 	// Called every frame

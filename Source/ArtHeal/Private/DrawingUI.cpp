@@ -40,17 +40,17 @@ void UDrawingUI::OnMyClickSend()
     PlayAnimationForward(Loading);
 
     //그다음 분석 UI로 넘어가도록 코드 작성
-    FTimerHandle handle;
+    //FTimerHandle handle;
 
-    // 5초 뒤에 분석 UI로 넘어가도록 타이머 설정 (람다 사용)
-    GetWorld()->GetTimerManager().SetTimer(handle, [this]()
-        {
-            if (player)
-            {
-                player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
-                player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
-            }
-        }, 5.0f, false);
+    //// 5초 뒤에 분석 UI로 넘어가도록 타이머 설정 (람다 사용)
+    //GetWorld()->GetTimerManager().SetTimer(handle, [this]()
+    //    {
+    //        if (player)
+    //        {
+    //            player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
+    //            player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+    //        }
+    //    }, 5.0f, false);
 
 
     // 주제가 설정되지 않았다면 설정

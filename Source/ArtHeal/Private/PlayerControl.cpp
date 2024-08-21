@@ -31,6 +31,7 @@
 #include "AnalyzeUI.h"
 #include "Camera/CameraActor.h"
 #include "Engine/TextureRenderTarget2D.h"
+#include "Components/TextBlock.h"
 
 
 // Sets default values
@@ -46,22 +47,15 @@ APlayerControl::APlayerControl()
 	if (TempMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
-		// 2. Mesh ������Ʈ�� ��ġ�� ȸ�� ���� �����ϰ� �ʹ�.
-		//GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator(0, 0, -90));
-		//3. �޽��� �ݸ��� ������ NoCollision���� �����Ѵ�.
 		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-	//3. TPS ī�޶� ���̰� �ʹ�.
-	//3-1. SpringArm ������Ʈ ���̱�
 	springArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	springArmComp->SetupAttachment(RootComponent);
 	springArmComp->SetRelativeLocation(FVector(0, 0, 80));
 	springArmComp->TargetArmLength = 400;
-	//���Ʒ��� �����Ӱ� �� �� �ֵ��� ����
 
 
 	springArmComp->bUsePawnControlRotation = true;
-	//3-2. Camera ������Ʈ ���̱�
 	tpsCamComp = CreateDefaultSubobject<UCameraComponent>(TEXT("TpsCamComp"));
 	tpsCamComp->SetupAttachment(springArmComp);
 	tpsCamComp->bUsePawnControlRotation = false;
@@ -112,6 +106,9 @@ void APlayerControl::BeginPlay()
 
 	Paintable = Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this, APaintTarget::StaticClass()));
 
+	if (GEngine) {
+		GEngine->bEnableOnScreenDebugMessages= false;
+	}
 	CameraActor = Cast<ACameraActor>(UGameplayStatics::GetActorOfClass(this, ACameraActor::StaticClass()));
 }
 
@@ -223,7 +220,7 @@ void APlayerControl::Paint()
 	CollisionParams.bReturnFaceIndex = true;
 
 	GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECC_Visibility, CollisionParams);
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
+	//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Emerald, false, 1, 5, 2.f);
 
 	if (HitResult.bBlockingHit)
 	{
@@ -253,7 +250,6 @@ void APlayerControl::Paint()
 
 void APlayerControl::SaveTexture()
 {
-	//�����׸� �׸��� TextureRenderTarget ���� �޾Ƽ� �����ϰ� �ʹ�
 	UTextureRenderTarget2D* TexRT_ = Paintable->CRT_PaintMask;
 
 	FImage Image;
@@ -267,7 +263,8 @@ void APlayerControl::SaveTexture()
 	{
 		return;
 	}
-	FString MainFileName = "TEST";
+	//FString MainFileName = "TEST";
+	FString MainFileName = DrawingUI->ArtTitle->GetText().ToString();
 	FString TimeStr = GetFormattedDateTime();
 	FString FileName = FString::Printf(TEXT("/%s_%s.jpeg"), *MainFileName, *TimeStr);
 	FString imagePath = FPaths::ProjectPersistentDownloadDir() + FileName;
