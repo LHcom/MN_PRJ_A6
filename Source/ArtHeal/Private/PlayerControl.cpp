@@ -85,6 +85,8 @@ void APlayerControl::BeginPlay()
 		DrawingUI->AddToViewport();
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+
+	Paintable =Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this,APaintTarget::StaticClass()));
 	
 }
 
@@ -177,8 +179,8 @@ void APlayerControl::Paint()
 		{
 			FVector2D uv;
 			UGameplayStatics::FindCollisionUV(HitResult, 0, uv);
-
-			Paintable->Painted(0,uv,50);
+			
+			Paintable->Painted(brushNum,uv,50);
 		}
 	}
 }
@@ -209,5 +211,27 @@ void APlayerControl::SaveTexture()
 	FFileHelper::SaveArrayToFile(CompressedData,*imagePath);
 	
 	//ApiActor->ReqPostText("Painted.jpg",CompressedData);
+}
+
+void APlayerControl::SetBrushNum(int32 num)
+{
+	brushNum=num;
+}
+
+void APlayerControl::SetDrawingUIVisible(bool value)
+{
+	auto pc = Cast<APlayerController>(Controller);
+	if(value)
+	{
+		pc->SetShowMouseCursor(true);
+		pc->SetInputMode(FInputModeGameAndUI());
+		DrawingUI->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		pc->SetShowMouseCursor(false);
+		pc->SetInputMode(FInputModeGameOnly());
+		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 

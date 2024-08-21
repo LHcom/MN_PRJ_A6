@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+
+
 UCLASS()
 class ARTHEAL_API UDrawingUI : public UUserWidget
 {
@@ -22,6 +25,33 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ArtTitle;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_0;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_1;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_2;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_3;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_4;
+	
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_5;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_6;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_7;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Button_8;
 
 	UFUNCTION()
 	void OnMyClickSend(); //�м��� ������ �Լ�
@@ -51,4 +81,26 @@ public:
 
 	FString Key;
 	
+	UFUNCTION()
+	void OnClickedColorBtn_0();
+	UFUNCTION()
+	void OnClickedColorBtn_1();
+	UFUNCTION()
+	void OnClickedColorBtn_2();
+	UFUNCTION()
+	void OnClickedColorBtn_3();
+	UFUNCTION()
+	void OnClickedColorBtn_4();
+	UFUNCTION()
+	void OnClickedColorBtn_5();
+	UFUNCTION()
+	void OnClickedColorBtn_6();
+	UFUNCTION()
+	void OnClickedColorBtn_7();
+	UFUNCTION()
+	void OnClickedColorBtn_8();
+	
+	UPROPERTY()
+	class APaintTarget* PaintTarget;
 };
+

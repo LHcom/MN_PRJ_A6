@@ -80,4 +80,14 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UDrawingUI* DrawingUI;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	int32 brushNum;
+
+	UFUNCTION()
+	void SetBrushNum(int32 num);
+	
+	UFUNCTION()
+	void SetDrawingUIVisible(bool value);
+	
 };

@@ -18,6 +18,17 @@ void UDrawingUI::NativeConstruct()
 
 	player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	
+	Button_0->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_0);
+	Button_1->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_1);
+	Button_2->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_2);
+	Button_3->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_3);
+	Button_4->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_4);
+	Button_5->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_5);
+	Button_6->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_6);
+	Button_7->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_7);
+	Button_8->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_8);
+
+	PaintTarget =player->Paintable;
 }
 
 void UDrawingUI::OnMyClickSend()
@@ -100,4 +111,52 @@ FString UDrawingUI::GetRandomTopic()
         UE_LOG(LogTemp, Error, TEXT("No topics available after reset."));
         return TEXT("Error: No topics available after reset.");
     }
+}
+
+void UDrawingUI::OnClickedColorBtn_0()
+{
+	// 버튼을 누르면 브러쉬의 mat 변수에 값을 변경하여 색깔을 변경하고 싶다
+	// 캐릭터가 그릴때 브러쉬 넘버를 보내기때문에
+	player->SetBrushNum(0);
+	
+}
+
+void UDrawingUI::OnClickedColorBtn_1()
+{
+	player->SetBrushNum(1);
+}
+
+void UDrawingUI::OnClickedColorBtn_2()
+{
+	player->SetBrushNum(2);
+}
+
+void UDrawingUI::OnClickedColorBtn_3()
+{
+	player->SetBrushNum(3);
+}
+
+void UDrawingUI::OnClickedColorBtn_4()
+{
+	player->SetBrushNum(4);
+}
+
+void UDrawingUI::OnClickedColorBtn_5()
+{
+	player->SetBrushNum(5);
+}
+
+void UDrawingUI::OnClickedColorBtn_6()
+{
+	player->SetBrushNum(6);
+}
+
+void UDrawingUI::OnClickedColorBtn_7()
+{
+	player->SetBrushNum(7);
+}
+
+void UDrawingUI::OnClickedColorBtn_8()
+{
+	player->SetBrushNum(8);
 }
