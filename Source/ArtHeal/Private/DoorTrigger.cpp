@@ -14,20 +14,20 @@ ADoorTrigger::ADoorTrigger()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Trigger component 생성 및 초기화
-	Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
-	Trigger->SetBoxExtent(FVector(30.0f, 30.0f, 30.0f));
-	Trigger->SetCollisionProfileName(TEXT("Trigger"));
-	RootComponent = Trigger;
+	//Trigger = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger"));
+	//Trigger->SetBoxExtent(FVector(30.0f, 30.0f, 30.0f));
+	//Trigger->SetCollisionProfileName(TEXT("Trigger"));
+	//RootComponent = Trigger;
 
-	// LevelSequenceActor와 DoorSequence 초기화 (필요 시)
-	LevelActor = nullptr;
-	DoorSequence = nullptr;
+	//// LevelSequenceActor와 DoorSequence 초기화 (필요 시)
+	//LevelActor = nullptr;
+	//DoorSequence = nullptr;
 
-	// LevelSequence 찾기
-	ConstructorHelpers::FObjectFinder<ULevelSequence> LS(TEXT("/Game/Bada/sequence/DoorAnim.DoorAnim"));
-	if (LS.Succeeded()) {
-		DoorSequence = LS.Object;
-	}
+	//// LevelSequence 찾기
+	//ConstructorHelpers::FObjectFinder<ULevelSequence> LS(TEXT("/Game/Bada/sequence/DoorAnim.DoorAnim"));
+	//if (LS.Succeeded()) {
+	//	DoorSequence = LS.Object;
+	//}
 
 }
 
@@ -36,7 +36,7 @@ void ADoorTrigger::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FMovieSceneSequencePlaybackSettings Settings;
+	/*FMovieSceneSequencePlaybackSettings Settings;
 	Settings.bAutoPlay = false;
 	Settings.bPauseAtEnd = true;
 
@@ -48,7 +48,7 @@ void ADoorTrigger::BeginPlay()
 			UE_LOG(LogTemp, Error, TEXT("Failed to create Level Sequence Player."));
 			return;
 		}
-	}
+	}*/
 	
 }
 
@@ -59,25 +59,25 @@ void ADoorTrigger::Tick(float DeltaTime)
 
 }
 
-void ADoorTrigger::NotifyActorBeginOverlap(AActor* OtherActor)
-{
-	Super::NotifyActorBeginOverlap(OtherActor);
-
-	UE_LOG(LogTemp, Warning, TEXT("d1"));
-
-	if (LevelPlayer) {
-		UE_LOG(LogTemp, Warning, TEXT("d2"));
-		LevelPlayer->Play();
-	}
-}
-
-void ADoorTrigger::NotifyActorEndOverlap(AActor* OtherActor)
-{
-	Super::NotifyActorEndOverlap(OtherActor);
-	UE_LOG(LogTemp, Warning, TEXT("c1"));
-	if (LevelPlayer) {
-		UE_LOG(LogTemp, Warning, TEXT("c2"));
-		LevelPlayer->PlayReverse();
-	}
-}
+//void ADoorTrigger::NotifyActorBeginOverlap(AActor* OtherActor)
+//{
+//	Super::NotifyActorBeginOverlap(OtherActor);
+//
+//	UE_LOG(LogTemp, Warning, TEXT("d1"));
+//
+//	if (LevelPlayer) {
+//		UE_LOG(LogTemp, Warning, TEXT("d2"));
+//		LevelPlayer->Play();
+//	}
+//}
+//
+//void ADoorTrigger::NotifyActorEndOverlap(AActor* OtherActor)
+//{
+//	Super::NotifyActorEndOverlap(OtherActor);
+//	UE_LOG(LogTemp, Warning, TEXT("c1"));
+//	if (LevelPlayer) {
+//		UE_LOG(LogTemp, Warning, TEXT("c2"));
+//		LevelPlayer->PlayReverse();
+//	}
+//}
 

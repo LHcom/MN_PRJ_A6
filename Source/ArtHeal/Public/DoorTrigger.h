@@ -23,7 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	/*virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
@@ -37,6 +37,6 @@ public:
 	class ULevelSequence* DoorSequence;
 
 	UPROPERTY(EditDefaultsOnly)
-	class ULevelSequencePlayer* LevelPlayer;
+	class ULevelSequencePlayer* LevelPlayer;*/
 
 };
