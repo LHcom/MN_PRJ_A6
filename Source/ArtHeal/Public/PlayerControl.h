@@ -39,7 +39,7 @@ public:
 
 	//�̵��ӵ�
 	UPROPERTY(EditAnywhere, Category = PlayerSetting)
-	float walkSpeed = 600.0f;
+	float walkSpeed = 50.0f;
 	//�̵�����
 	FVector direction;
 

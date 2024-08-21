@@ -62,6 +62,7 @@ APlayerControl::APlayerControl()
 	//bUseControllerRotationYaw = false;
 
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 }
 
 // Called when the game starts or when spawned
@@ -178,9 +179,18 @@ void APlayerControl::PlayerMove(float DeltaTime)
 	SetActorLocation(P);
 	direction = FVector::ZeroVector;*/
 
-	direction = FTransform(GetControlRotation()).TransformVector(direction);
+	/*direction = FTransform(GetControlRotation()).TransformVector(direction);
 
 	AddMovementInput(direction);
+	direction = FVector::ZeroVector;*/
+
+	// 방향을 컨트롤러의 회전값을 기준으로 변환
+	FVector movementDirection = FTransform(GetControlRotation()).TransformVector(direction);
+
+	// 움직임을 추가
+	AddMovementInput(movementDirection, walkSpeed);
+
+	// 방향 벡터 초기화
 	direction = FVector::ZeroVector;
 }
 
