@@ -88,6 +88,7 @@ void APlayerControl::BeginPlay()
 	{
 		DrawingUI->AddToViewport();
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+		DrawingUI->SetArtTitle();
 	}
 
 	AnalyzeUI = CreateWidget<UAnalyzeUI>(GetWorld(), AnalyzeUIFactory);

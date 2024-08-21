@@ -109,5 +109,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = UIImage)
 	class UImage* Airplane;
 
+	bool bIsArtTitleSet;
+
 };
 
