@@ -80,6 +80,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	class UDrawingUI* DrawingUI;
+
+	UPROPERTY()
+	class UPlayerAnim* anim;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int32 brushNum;

@@ -23,6 +23,7 @@
 #include "Misc/FileHelper.h"
 #include "UObject/ConstructorHelpers.h"
 #include "YJ/PaintTarget.h"
+#include "PlayerAnim.h"
 
 // Sets default values
 APlayerControl::APlayerControl()
@@ -70,6 +71,8 @@ void APlayerControl::BeginPlay()
 			subsystem->AddMappingContext(imc_Player, 0);
 		}
 	}
+
+	anim = Cast<UPlayerAnim>(GetMesh()->GetAnimInstance());
 
 	for (FActorIterator It(GetWorld()); It; ++It)
 	{
