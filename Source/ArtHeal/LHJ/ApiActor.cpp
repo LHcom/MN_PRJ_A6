@@ -3,6 +3,7 @@
 #include "AnalyzeUI.h"
 #include "HttpModule.h"
 #include "PlayerControl.h"
+#include "DrawingUI.h"
 // #include "Kismet/GameplayStatics.h"
 // #include "Sound/SoundWaveProcedural.h"
 
@@ -153,10 +154,12 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 			APlayerControl* player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
 			if (player && player->AnalyzeUI)
 			{
+				// 조회 UI 뷰잉
+				player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
+				player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+
 				// AnalyzeUI 호출
 				player->AnalyzeUI->SetAnalysisText(stParsingValue.imgTitle, stParsingValue.recogMsg);
-				//player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
-				//player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
 			}
 		}
 	}
@@ -170,8 +173,22 @@ void AApiActor::OnResPostText(FHttpRequestPtr Request, FHttpResponsePtr Response
 	{
 		FString Result = Response->GetContentAsString();
 		ParsingValue parsingStruct = ParsingJsonValue(Result);
+
+		if (parsingStruct.returnCode != 200) {
+			// 로딩 UI 종료
+			// 네트워크 문제로 인한 설명
+			APlayerControl* player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
+			player->AnalyzeUI->SetVisibility(ESlateVisibility::Hidden);
+			player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
-	
+	else {
+		// 로딩 UI 종료
+		// 네트워크 문제로 인한 설명
+		APlayerControl* player = Cast<APlayerControl>(GetWorld()->GetFirstPlayerController()->GetPawn());
+		player->AnalyzeUI->SetVisibility(ESlateVisibility::Hidden);
+		player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 // void AApiActor::WavFileDownload(FString DownloadURL, FString SaveFullPath)

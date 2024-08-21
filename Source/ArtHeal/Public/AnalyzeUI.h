@@ -38,11 +38,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Paint")
 	UMaterialInstanceDynamic* TempMat;
 
-	UPROPERTY(EditAnywhere, Category = "Paint")
-	UMaterialInterface* BDIMG_PaintMat;
-
-	UPROPERTY(EditAnywhere, Category = "Paint")
-	UMaterialInstanceDynamic* BDTempMat;
 
 	UFUNCTION()
 	void SetDrawingImage();
