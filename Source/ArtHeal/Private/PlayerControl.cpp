@@ -7,7 +7,6 @@
 #include <EnhancedInputComponent.h>
 #include <InputTriggers.h>
 #include<Camera/CameraComponent.h>
-
 #include "DrawDebugHelpers.h"
 #include "DrawingUI.h"
 #include "EngineUtils.h"
@@ -25,6 +24,7 @@
 #include "YJ/PaintTarget.h"
 #include "PlayerAnim.h"
 #include "AnalyzeUI.h"
+
 
 // Sets default values
 APlayerControl::APlayerControl()
@@ -96,11 +96,8 @@ void APlayerControl::BeginPlay()
 		AnalyzeUI->AddToViewport();
 		AnalyzeUI->SetVisibility(ESlateVisibility::Hidden);
 	}
-
-
-
-	Paintable =Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this,APaintTarget::StaticClass()));
 	
+	Paintable =Cast<APaintTarget>(UGameplayStatics::GetActorOfClass(this,APaintTarget::StaticClass()));
 }
 
 // Called every frame
@@ -285,6 +282,11 @@ void APlayerControl::SetDrawingUIVisible(bool value)
 		pc->SetInputMode(FInputModeGameAndUI());
 		DrawingUI->SetVisibility(ESlateVisibility::Hidden);
 	}
+}
+
+void APlayerControl::ShowMouseCursor(bool value)
+{
+	pc->SetShowMouseCursor(value);
 }
 
 

@@ -29,7 +29,7 @@ void UDrawingUI::NativeConstruct()
 	Button_7->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_7);
 	Button_8->OnClicked.AddDynamic(this, &UDrawingUI::OnClickedColorBtn_8);
 
-	PaintTarget =player->Paintable;
+	//PaintTarget =player->Paintable;
 }
 
 void UDrawingUI::OnMyClickSend()
@@ -43,7 +43,8 @@ void UDrawingUI::OnMyClickSend()
     player->AnalyzeUI->SetVisibility(ESlateVisibility::Visible);
     player->DrawingUI->SetVisibility(ESlateVisibility::Hidden);
 
-
+	player->pc->SetViewTargetWithBlend(player);
+	player->bPainting = false;
 }
 
 void UDrawingUI::GetImageMat()

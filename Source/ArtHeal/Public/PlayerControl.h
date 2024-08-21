@@ -101,9 +101,15 @@ public:
 	void SetDrawingUIVisible(bool value);
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int32 bPainting=false;
+	bool bPainting=false;
+	
 	UPROPERTY()
 	APlayerController* pc;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	FVector MyVector;
+
+	UFUNCTION(BlueprintCallable)
+	void ShowMouseCursor(bool value);
+	
+	
 };

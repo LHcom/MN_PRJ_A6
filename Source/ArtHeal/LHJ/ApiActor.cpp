@@ -167,6 +167,10 @@ ParsingValue AApiActor::ParsingJsonValue(const FString& json)
 void AApiActor::OnResPostText(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
 {
 	// parsing
-	FString Result = Response->GetContentAsString();
-	ParsingValue parsingStruct = ParsingJsonValue(Result);
+	if(Response)
+	{
+		FString Result = Response->GetContentAsString();
+		ParsingValue parsingStruct = ParsingJsonValue(Result);
+	}
+	
 }
