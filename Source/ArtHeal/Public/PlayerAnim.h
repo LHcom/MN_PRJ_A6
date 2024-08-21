@@ -17,11 +17,11 @@ class ARTHEAL_API UPlayerAnim : public UAnimInstance
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerAnim)
 	float Speed;
 
 	//플레이어 좌우 이동 속도
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = PlayerAnim)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerAnim)
 	float direction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = PlayerAnim)

@@ -23,6 +23,7 @@ void UPlayerAnim::NativeUpdateAnimation(float DeltaSeconds)
 		FVector forwardVector = player->GetActorForwardVector();
 		//5. 스피드에 값(내적)할당하기
 		Speed = FVector::DotProduct(forwardVector, velocity);
+		GEngine->AddOnScreenDebugMessage(-1, DeltaSeconds, FColor::Green, FString::Printf(TEXT("%s %s"), *velocity.ToString(), *forwardVector.ToString()));
 		//6. 좌우 속도 할당하기
 		FVector rightVector = player->GetActorRightVector();
 		direction = FVector::DotProduct(rightVector, velocity);
