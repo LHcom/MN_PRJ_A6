@@ -2,10 +2,9 @@
 
 #include "AnalyzeUI.h"
 #include "HttpModule.h"
-#include "GameFramework/HUD.h"
-#include "Kismet/GameplayStatics.h"
 #include "PlayerControl.h"
-#include "DrawingUI.h"
+// #include "Kismet/GameplayStatics.h"
+// #include "Sound/SoundWaveProcedural.h"
 
 AApiActor::AApiActor()
 {
@@ -170,3 +169,91 @@ void AApiActor::OnResPostText(FHttpRequestPtr Request, FHttpResponsePtr Response
 	FString Result = Response->GetContentAsString();
 	ParsingValue parsingStruct = ParsingJsonValue(Result);
 }
+
+// void AApiActor::WavFileDownload(FString DownloadURL, FString SaveFullPath)
+// {
+// 	SaveWavPath = SaveFullPath;
+// 	// HTTP Request
+// 	TSharedRef<IHttpRequest> HttpRequest = FHttpModule::Get().CreateRequest();
+// 	HttpRequest->SetVerb(TEXT("GET"));
+// 	HttpRequest->SetURL(DownloadURL);
+// 	HttpRequest->OnProcessRequestComplete().BindUObject(this, &AApiActor::OnResDownloadWav);
+// 	HttpRequest->SetTimeout(300.f);
+// 	HttpRequest->ProcessRequest();
+// }
+//
+// void AApiActor::OnResDownloadWav(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully)
+// {
+// 	if (bConnectedSuccessfully)
+// 	{
+// 		const TArray<uint8>& Data = Response->GetContent();
+//
+// 			FFileHelper::SaveArrayToFile(Data, *SaveWavPath);
+// 			UE_LOG(LogTemp, Warning, TEXT("WAV file saved to %s"), *SaveWavPath);
+// 	}
+// }
+
+// void AApiActor::PlaySoundFromFile(const FString& FilePath)
+// {
+// 	USoundWave* SoundWave = LoadWavFile(FilePath);
+// 	if (SoundWave)
+// 	{
+// 		UGameplayStatics::PlaySoundAtLocation(this, SoundWave, GetActorLocation());
+// 	}
+// }
+
+// void AApiActor::LoadWavFile(const FString& FilePath)
+// {
+// 	//  TArray<uint8> RawFileData;
+// 	//  if (!FFileHelper::LoadFileToArray(RawFileData, *FilePath))
+// 	//  {
+// 	//  	UE_LOG(LogTemp, Warning, TEXT("Failed to load WAV file from %s"), *FilePath);
+// 	//  	return nullptr;
+// 	//  }
+// 	//
+// 	//  USoundWaveProcedural* SoundWave = NewObject<USoundWaveProcedural>();
+// 	//  SoundWave->SetSampleRate(44100);  // 기본 샘플 레이트
+// 	//  SoundWave->NumChannels = 2;       // 기본 채널 수
+// 	//  SoundWave->Duration = RawFileData.Num() / (2 * 44100);  // 임시
+// 	//
+// 	//  SoundWave->QueueAudio(RawFileData.GetData(), RawFileData.Num());
+// 	// return SoundWave;
+//
+//
+// 	//=======================================================
+// 	//=======================================================
+// 	//
+// 	// TArray<uint8> RawFileData;
+// 	// if (!FFileHelper::LoadFileToArray(RawFileData, *FilePath))
+// 	// {
+// 	// 	UE_LOG(LogTemp, Warning, TEXT("Failed to load WAV file from %s"), *FilePath);
+// 	// 	return nullptr;
+// 	// }
+// 	//
+// 	// FWavHeader* WavHeader = reinterpret_cast<FWavHeader*>(RawFileData.GetData());
+// 	//
+// 	// // Wav 파일의 유효성 검사
+// 	// // if (WavHeader->AudioFormat != 1) // PCM 형식인지 확인
+// 	// // {
+// 	// // 	UE_LOG(LogTemp, Warning, TEXT("Unsupported WAV format in %s"), *FilePath);
+// 	// // 	return nullptr;
+// 	// // }
+// 	//
+// 	// const uint32 HeaderSize = sizeof(FWavHeader);
+// 	// const uint32 AudioDataSize = RawFileData.Num() - HeaderSize;
+// 	// const uint8* AudioData = RawFileData.GetData() + HeaderSize;
+// 	//
+// 	// USoundWaveProcedural* SoundWave = NewObject<USoundWaveProcedural>();
+// 	// SoundWave->SetSampleRate(WavHeader->SampleRate);
+// 	// SoundWave->NumChannels = WavHeader->NumChannels;
+// 	// SoundWave->Duration = static_cast<float>(WavHeader->Subchunk2Size) / WavHeader->ByteRate;
+// 	//
+// 	// SoundWave->QueueAudio(AudioData, AudioDataSize);
+// 	//
+// 	// return SoundWave;
+//
+// 	//====================================================
+// 	//====================================================
+//
+// 	
+// }
